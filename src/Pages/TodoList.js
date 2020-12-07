@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Todo from '../Components/Todo';
 import {getTodos} from '../api/todos';
 import {connect} from 'react-redux';
-import {addTodo, removeTodo} from '../Store/actions/todos'
+import {addTodo, removeTodo, initialize} from '../Store/actions/todos'
 import '../Styles/TodoList.css'
 import _ from 'lodash';
 
@@ -17,9 +17,12 @@ class TodoList extends Component {
   }
 
   componentDidMount() {
-    getTodos().then(res => {
-      res.map(r => this.props.addTodo(r.title))
-    })
+    if (!this.props.initialized) {
+      getTodos().then(res => {
+        res.map(r => this.props.addTodo(r.title))
+        this.props.initialize()
+      })
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -58,13 +61,15 @@ class TodoList extends Component {
 }
 
 const mapStateToProps = state => ({
+  initialized: state.initialized,
   data: state.data,
 })
 
 const mapDispatchToProps = dispatch => {
   return {
     addTodo: (title) => dispatch(addTodo(title)),
-    removeTodo: (todo) => dispatch(removeTodo(todo))
+    removeTodo: (todo) => dispatch(removeTodo(todo)),
+    initialize: () => dispatch(initialize())
   }
 }
 

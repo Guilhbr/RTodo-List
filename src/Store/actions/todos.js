@@ -7,3 +7,7 @@ export const removeTodo = (todo) => ({
   type: 'REMOVE_TODO',
   payload: todo
 });
+
+export const initialize = () => ({
+  type: 'INITIALIZE',
+})

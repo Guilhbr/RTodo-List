@@ -28,6 +28,12 @@ export default function todoReducer(state = initialState, action) {
         data: state.data.filter(d => d.title !== todo.title),
       }
     }
+    case 'INITIALIZE': {
+      return {
+        ...state,
+        initialized: true,
+      }
+    }
     default:
       return state
   }
