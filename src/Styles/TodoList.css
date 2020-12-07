@@ -21,7 +21,7 @@ body {
 .todo-text {
   cursor: pointer;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .delete-text{

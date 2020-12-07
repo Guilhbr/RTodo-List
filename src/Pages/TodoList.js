@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Todo from '../Components/Todo';
+import {getTodos} from '../api/todos'
 import '../Styles/TodoList.css'
 import _ from 'lodash';
 
@@ -8,10 +9,17 @@ class TodoList extends Component {
     super(props)
     this.state = {
       inputData: '',
-      mockData: ['hello', 'test', 'another', 'just', 'testing']
+      data: [],
+      lastId: 10,
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
+  }
+
+  componentDidMount() {
+    getTodos().then(res => {
+      this.setState({data: res})
+    })
   }
 
   handleChange(event) {
@@ -22,28 +30,29 @@ class TodoList extends Component {
     if (event.key === 'Enter' || event.keyCode === 13) {
       event.preventDefault()
       let text = this.state.inputData.trim()
-      let data = this.state.mockData
-      data.push(text)
-      this.setState({inputData: '', mockData: data})
+      let sample = {userId: 1, id: this.state.lastId + 1, title: text, completed: false}
+      let temp = this.state.data
+      temp.push(sample)
+      this.setState({inputData: '', data: temp})
     }
   }
 
-  removeTodo(data) {
-    let mock = this.state.mockData
-    const index = mock.findIndex(d => d === data)
-    mock.splice(index, 1)
-    this.setState({mockData: mock})
+  removeTodo(todo) {
+    let temp = this.state.data
+    const index = temp.findIndex(d => d === todo)
+    temp.splice(index, 1)
+    this.setState({data: temp})
   }
 
   render () {
-    const {mockData} = this.state
+    const {data} = this.state
     return (
       <div className="list-container">
         <input className="input-todo" placeholder="New todo" value={this.state.inputData} autoFocus={true} 
           onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
         <div>
-          {_.map(mockData, (data, i) => {
-            return <Todo key={i} removeTodo={() => this.removeTodo(data)} text={data}/>
+          {_.map(data, (todo, i) => {
+            return <Todo key={i} removeTodo={() => this.removeTodo(data)} todo={todo}/>
           })}
         </div>
       </div>
