@@ -1,5 +1,4 @@
 export default function Todo ({todo, removeTodo}) {
-  console.log(todo)
   return (
     <div className="todo-container">
       <div className="todo-text">

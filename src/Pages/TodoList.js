@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Todo from '../Components/Todo';
-import {getTodos} from '../api/todos'
+import {getTodos} from '../api/todos';
+import {connect} from 'react-redux';
+import {addTodo, removeTodo} from '../Store/actions/todos'
 import '../Styles/TodoList.css'
 import _ from 'lodash';
 
@@ -9,8 +11,6 @@ class TodoList extends Component {
     super(props)
     this.state = {
       inputData: '',
-      data: [],
-      lastId: 10,
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
@@ -18,8 +18,14 @@ class TodoList extends Component {
 
   componentDidMount() {
     getTodos().then(res => {
-      this.setState({data: res})
+      res.map(r => this.props.addTodo(r.title))
     })
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.data.length !== prevProps.data.length) {
+      this.setState({data: this.props.data})
+    }
   }
 
   handleChange(event) {
@@ -30,29 +36,20 @@ class TodoList extends Component {
     if (event.key === 'Enter' || event.keyCode === 13) {
       event.preventDefault()
       let text = this.state.inputData.trim()
-      let sample = {userId: 1, id: this.state.lastId + 1, title: text, completed: false}
-      let temp = this.state.data
-      temp.push(sample)
-      this.setState({inputData: '', data: temp})
+      this.props.addTodo(text)
+      this.setState({inputData: ''})
     }
   }
 
-  removeTodo(todo) {
-    let temp = this.state.data
-    const index = temp.findIndex(d => d === todo)
-    temp.splice(index, 1)
-    this.setState({data: temp})
-  }
-
   render () {
-    const {data} = this.state
+    const {data} = this.props
     return (
       <div className="list-container">
         <input className="input-todo" placeholder="New todo" value={this.state.inputData} autoFocus={true} 
           onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
         <div>
           {_.map(data, (todo, i) => {
-            return <Todo key={i} removeTodo={() => this.removeTodo(data)} todo={todo}/>
+            return <Todo key={i} removeTodo={() => this.props.removeTodo(todo)} todo={todo}/>
           })}
         </div>
       </div>
@@ -60,4 +57,15 @@ class TodoList extends Component {
   }
 }
 
-export default TodoList
+const mapStateToProps = state => ({
+  data: state.data,
+})
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addTodo: (title) => dispatch(addTodo(title)),
+    removeTodo: (todo) => dispatch(removeTodo(todo))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
