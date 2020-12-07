@@ -1,11 +1,11 @@
-export default function Todo ({text}) {
+export default function Todo ({text, removeTodo}) {
   return (
-    <div>
-      <div>
+    <div className="todo-container">
+      <div className="todo-text">
         {text}
       </div>
-      <div>
-        Delete
+      <div onClick={removeTodo} className="delete-text">
+        X
       </div>
     </div>
   )

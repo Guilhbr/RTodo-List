@@ -1,0 +1,38 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.list-container {
+  min-width: 50vw;
+  width: 100%;
+  align-self: center;
+}
+.todo-container {
+  border: 1px solid black;
+  border-radius: 15px;
+  justify-content: space-between;
+  padding: 1rem;
+  display: flex;
+  text-align: left;
+}
+
+.todo-text {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.delete-text{
+  color: red;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.input-todo {
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  width: 100%;
+  max-width: 100%;
+}
