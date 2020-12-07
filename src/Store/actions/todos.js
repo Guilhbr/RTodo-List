@@ -11,3 +11,8 @@ export const removeTodo = (todo) => ({
 export const initialize = () => ({
   type: 'INITIALIZE',
 })
+
+export const toggleCompleted = (todo) => ({
+  type: 'TOGGLE_COMPLETED',
+  payload: todo
+})

@@ -23,9 +23,10 @@ export default function todoReducer(state = initialState, action) {
     }
     case 'REMOVE_TODO': {
       const todo = action.payload
+      const index = state.data.findIndex(d => d.title === todo.title && d.id === todo.id)
       return {
         ...state,
-        data: state.data.filter(d => d.title !== todo.title),
+        data: [...state.data.slice(0, index), ...state.data.slice(index + 1)]
       }
     }
     case 'INITIALIZE': {
@@ -33,6 +34,19 @@ export default function todoReducer(state = initialState, action) {
         ...state,
         initialized: true,
       }
+    }
+    case 'TOGGLE_COMPLETED': {
+      const todo = action.payload
+      let data = state.data.map(d => {
+        if (d.id !== todo.id || d.title !== todo.title) {
+          return d;
+        } 
+        return {
+          ...d,
+          completed: !d.completed
+        }
+      })
+      return {...state, data}
     }
     default:
       return state

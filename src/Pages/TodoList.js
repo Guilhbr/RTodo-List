@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Todo from '../Components/Todo';
 import {getTodos} from '../api/todos';
 import {connect} from 'react-redux';
-import {addTodo, removeTodo, initialize} from '../Store/actions/todos'
+import {addTodo, removeTodo, initialize, toggleCompleted} from '../Store/actions/todos'
 import '../Styles/TodoList.css'
 import _ from 'lodash';
 
@@ -52,7 +52,8 @@ class TodoList extends Component {
           onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
         <div>
           {_.map(data, (todo, i) => {
-            return <Todo key={i} removeTodo={() => this.props.removeTodo(todo)} todo={todo}/>
+            return <Todo key={i} toggleCompleted={() => this.props.toggleCompleted(todo)} 
+              removeTodo={() => this.props.removeTodo(todo)} todo={todo}/>
           })}
         </div>
       </div>
@@ -69,7 +70,8 @@ const mapDispatchToProps = dispatch => {
   return {
     addTodo: (title) => dispatch(addTodo(title)),
     removeTodo: (todo) => dispatch(removeTodo(todo)),
-    initialize: () => dispatch(initialize())
+    initialize: () => dispatch(initialize()),
+    toggleCompleted: (todo) => dispatch(toggleCompleted(todo))
   }
 }
 
