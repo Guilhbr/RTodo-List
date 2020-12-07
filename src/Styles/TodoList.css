@@ -46,3 +46,17 @@ body {
   max-width: 100%;
 }
 
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.75rem 0rem;
+}
+
+.filter-container > div {
+  cursor: pointer;
+}
+
+.active-filter {
+  font-weight: bold;
+  text-decoration: underline;
+}

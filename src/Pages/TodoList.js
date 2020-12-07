@@ -11,6 +11,7 @@ class TodoList extends Component {
     super(props)
     this.state = {
       inputData: '',
+      filter: '',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
@@ -46,12 +47,33 @@ class TodoList extends Component {
 
   render () {
     const {data} = this.props
+    const {filter} = this.state
     return (
       <div className="list-container">
+        <div className="filter-container">
+          <div className={`${filter === '' ? 'active-filter' : ''}`} onClick={() => this.setState({filter: ''})}>
+            ALL
+          </div>
+          <div className={`${filter === 'completed' ? 'active-filter' : ''}`} onClick={() => this.setState({filter: 'completed'})}>
+            COMPLETED
+          </div>
+          <div className={`${filter === 'active' ? 'active-filter' : ''}`} onClick={() => this.setState({filter: 'active'})}>
+            ACTIVE
+          </div>
+        </div>
         <input className="input-todo" placeholder="New todo" value={this.state.inputData} autoFocus={true} 
           onChange={this.handleChange} onKeyDown={this.handleKeyDown}/>
         <div>
           {_.map(data, (todo, i) => {
+            switch(filter) {
+              case 'completed':
+                if (!todo.completed) return;
+                break;
+              case 'active': 
+                if (todo.completed) return;
+                break;
+              default: {}
+            }
             return <Todo key={i} toggleCompleted={() => this.props.toggleCompleted(todo)} 
               removeTodo={() => this.props.removeTodo(todo)} todo={todo}/>
           })}
