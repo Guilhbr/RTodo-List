@@ -1,6 +1,8 @@
 const initialState = {
   data: [],
   initialized: false,
+  loading: false,
+  error: null,
   currId: 0
 }
 
@@ -47,6 +49,30 @@ export default function todoReducer(state = initialState, action) {
         }
       })
       return {...state, data}
+    }
+    case 'GET_TODOS_CALL': {
+      return {
+        ...state,
+        loading: true,
+        error: null
+      }
+    }
+    case 'GET_TODOS_SUCCESS': {
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        data: action.payload,
+        initialized: true,
+      }
+    }
+    case 'GET_TODOS_ERROR': {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+        data: [],
+      }
     }
     default:
       return state

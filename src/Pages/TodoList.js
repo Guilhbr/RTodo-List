@@ -19,10 +19,7 @@ class TodoList extends Component {
 
   componentDidMount() {
     if (!this.props.initialized) {
-      getTodos().then(res => {
-        res.map(r => this.props.addTodo(r.title))
-        this.props.initialize()
-      })
+      this.props.dispatch(getTodos())
     }
   }
 
@@ -93,7 +90,9 @@ const mapDispatchToProps = dispatch => {
     addTodo: (title) => dispatch(addTodo(title)),
     removeTodo: (todo) => dispatch(removeTodo(todo)),
     initialize: () => dispatch(initialize()),
-    toggleCompleted: (todo) => dispatch(toggleCompleted(todo))
+    toggleCompleted: (todo) => dispatch(toggleCompleted(todo)),
+    getTodos: () => dispatch(getTodos),
+    dispatch
   }
 }
 
